@@ -36,6 +36,14 @@ RSpec.describe Grader do
       end
     end
 
+    context 'when passed valid answers outside of the answer_key' do
+      let(:grader) { Grader.new(['A', 'B', 'C']) }
+
+      it 'does not raise an error' do
+        expect { grader.score(['A', 'B', 'D']) }.not_to raise_error(ArgumentError)
+      end
+    end
+
     context 'when passed more answers than necessary' do
       let(:answers) { ['A', 'B', 'C'] }
       before do

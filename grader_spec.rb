@@ -39,7 +39,7 @@ RSpec.describe Grader do
       let(:grader) { Grader.new(['A', 'B', 'C']) }
 
       it 'does not raise an error' do
-        expect { grader.score(['A', 'B', 'D']) }.not_to raise_error(ArgumentError)
+        expect { grader.score(['A', 'B', 'D']) }.not_to raise_error
       end
     end
 

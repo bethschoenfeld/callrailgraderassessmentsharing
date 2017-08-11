@@ -1,20 +1,19 @@
 require_relative './grader'
 
 RSpec.describe Grader do
-  let!(:grader) { Grader.new(answer_key) }
+  let!(:grader) { Grader.new(answer_key, grades: grades) }
   let(:answer_key) { %w(A B C D) }
+  let(:grades) { [75, 50, 100] }
 
   it 'knows about an answer key' do
-    grader = Grader.new(answer_key)
     expect(grader.answer_key).to eq(answer_key)
   end
 
   it 'knows about grades' do
     grader = Grader.new(answer_key, grades: [75, 50, 100])
     grades = grader.grades
-
-    expect(grades).to be_kind_of(Array)
-    expect(grades).not_to be_empty
+    expect(grader.grades).to be_kind_of(Array)
+    expect(grader.grades).not_to be_empty
   end
 
   describe '#score' do
@@ -40,15 +39,13 @@ RSpec.describe Grader do
       let(:grader) { Grader.new(['A', 'B', 'C']) }
 
       it 'does not raise an error' do
-        expect { grader.score(['A', 'B', 'D']) }.not_to raise_error(ArgumentError)
+        expect { grader.score(['A', 'B', 'D']) }.not_to raise_error
       end
     end
 
     context 'when passed more answers than necessary' do
       let(:answers) { ['A', 'B', 'C'] }
-      before do
-        allow(grader).to receive(:answer_key).and_return(['A', 'B'])
-      end
+      let(:answer_key) { ['A', 'B'] }
 
       it 'raises an ArgumentError' do
         expect { grader.score(answers) }.to raise_error(ArgumentError)
@@ -82,7 +79,7 @@ RSpec.describe Grader do
   end
 
   context 'curving' do
-    before { allow(grader).to receive(:grades).and_return([75, 50, 25]) }
+    let(:grades) { [75, 50, 25] }
     describe '#curve' do
       it 'returns the original grades with the curve applied' do
         expect(grader.curve).to eq([100, 75, 50])

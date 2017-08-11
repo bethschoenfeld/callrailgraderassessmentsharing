@@ -5,20 +5,24 @@ RSpec.describe Grader do
   let(:answer_key) { %w(A B C D) }
   let(:grades) { [75, 50, 100] }
 
+  # the answer key contains the list of correct answers in order
   it 'knows about an answer key' do
+    expect(grader.answer_key).to be_kind_of(Array)
     expect(grader.answer_key).to eq(answer_key)
   end
 
+  # the grader has a way to keep track of all the tests it has scored
   it 'knows about grades' do
     grader = Grader.new(answer_key, grades: [75, 50, 100])
-    grades = grader.grades
     expect(grader.grades).to be_kind_of(Array)
     expect(grader.grades).not_to be_empty
   end
 
+  # grade a given student's test
   describe '#score' do
     let(:answers) { ['D', 'B', 'C', 'D'] }
-    it 'returns the percent of correct answers' do
+
+    it 'returns the percent of correct answers when compared to the answer key' do
       expect(grader.score(answers)).to eq(75.0)
     end
 
@@ -30,11 +34,13 @@ RSpec.describe Grader do
     # given that this is a multiple-choice grader, non-ABCD answers are invalid
     context 'when passed impossible answers' do
       let(:answers) { ['Apple', 'Banana', 'Celery', 'Delicious'] }
+
       it 'raises an ArgumentError' do
         expect { grader.score(answers) }.to raise_error(ArgumentError)
       end
     end
 
+    # it's possible that a valid answer is not one of the correct answers
     context 'when passed valid answers outside of the answer_key' do
       let(:grader) { Grader.new(['A', 'B', 'C']) }
 
@@ -52,34 +58,48 @@ RSpec.describe Grader do
       end
     end
 
-    # assume the student didn't finish the test in time
+    # the student didn't finish the test in time
     context 'when passed fewer answers than necessary' do
       let(:answers) { ['A', 'B'] }
+
       it 'counts the last missing answers as incorrect' do
         expect(grader.score(answers)).to eq(50.0)
       end
     end
 
+    # the student forgot to answer a question
     context 'when passed nil for an answer' do
       let(:answers) { ['A', 'B', nil, 'D'] }
+
       it 'counts the nil as incorrect' do
         expect(grader.score(answers)).to eq(75.0)
       end
     end
   end
 
+  # the grading scale:
+  # A: 100 - 90
+  # B: 89 - 80
+  # C: 79 - 75
+  # D: 74 - 70 D
+  # F: below 70
   describe '.letter_grade' do
     it 'returns a letter grade when passed a numerical score' do
-      expect(Grader.letter_grade(97.0)).to eq('A')
-      expect(Grader.letter_grade(83.0)).to eq('B')
+      expect(Grader.letter_grade(90.0)).to eq('A')
+      expect(Grader.letter_grade(80.0)).to eq('B')
       expect(Grader.letter_grade(75.0)).to eq('C')
       expect(Grader.letter_grade(70.0)).to eq('D')
       expect(Grader.letter_grade(60.0)).to eq('F')
     end
   end
 
+  # when the highest score on a test is less than 100, a teacher may want to
+  # curve each grade to account for unexpected test difficulty. curving bumps
+  # the highest grade up to 100 and adds the difference in points to all other
+  # scores.
   context 'curving' do
     let(:grades) { [75, 50, 25] }
+
     describe '#curve' do
       it 'returns the original grades with the curve applied' do
         expect(grader.curve).to eq([100, 75, 50])

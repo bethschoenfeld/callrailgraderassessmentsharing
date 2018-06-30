@@ -14,69 +14,68 @@ RSpec.describe Grader do
   # the grader has a way to keep track of all the tests it has scored
   it 'knows about grades' do
     grader = Grader.new(answer_key, grades: [75, 50, 100])
-    # grader = Grader.new()
     expect(grader.grades).to be_kind_of(Array)
     expect(grader.grades).not_to be_empty
   end
 
-  # # grade a given student's test
-  # describe '#score' do
-  #   let(:answers) { ['D', 'B', 'C', 'D'] }
+  # grade a given student's test
+  describe '#score' do
+    let(:answers) { ['D', 'B', 'C', 'D'] }
 
-  #   it 'returns the percent of correct answers when compared to the answer key' do
-  #     expect(grader.score(answers)).to eq(75.0)
-  #   end
+    it 'returns the percent of correct answers when compared to the answer key' do
+      expect(grader.score(answers)).to eq(75.0)
+    end
 
-  #   it 'keeps track of grades it has scored' do
-  #     expect { grader.score(answers) }.to change { grader.grades.count }.by(1)
-  #     expect(grader.grades.last).to eq(75.0)
-  #   end
+    # it 'keeps track of grades it has scored' do
+    #   expect { grader.score(answers) }.to change { grader.grades.count }.by(1)
+    #   expect(grader.grades.last).to eq(75.0)
+    # end
 
-  #   # given that this is a multiple-choice grader, non-ABCD answers are invalid
-  #   context 'when passed impossible answers' do
-  #     let(:answers) { ['Apple', 'Banana', 'Celery', 'Delicious'] }
+    # given that this is a multiple-choice grader, non-ABCD answers are invalid
+    # context 'when passed impossible answers' do
+    #   let(:answers) { ['Apple', 'Banana', 'Celery', 'Delicious'] }
 
-  #     it 'raises an ArgumentError' do
-  #       expect { grader.score(answers) }.to raise_error(ArgumentError)
-  #     end
-  #   end
+    #   it 'raises an ArgumentError' do
+    #     expect { grader.score(answers) }.to raise_error(ArgumentError)
+    #   end
+    # end
 
-  #   # it's possible that a valid answer is not one of the correct answers
-  #   context 'when passed valid answers outside of the answer_key' do
-  #     let(:grader) { Grader.new(['A', 'B', 'C']) }
+    # it's possible that a valid answer is not one of the correct answers
+    # context 'when passed valid answers outside of the answer_key' do
+    #   let(:grader) { Grader.new(['A', 'B', 'C']) }
 
-  #     it 'does not raise an error' do
-  #       expect { grader.score(['A', 'B', 'D']) }.not_to raise_error
-  #     end
-  #   end
+    #   it 'does not raise an error' do
+    #     expect { grader.score(['A', 'B', 'D']) }.not_to raise_error
+    #   end
+    # end
 
-  #   context 'when passed more answers than necessary' do
-  #     let(:answers) { ['A', 'B', 'C'] }
-  #     let(:answer_key) { ['A', 'B'] }
+    # context 'when passed more answers than necessary' do
+    #   let(:answers) { ['A', 'B', 'C'] }
+    #   let(:answer_key) { ['A', 'B'] }
 
-  #     it 'raises an ArgumentError' do
-  #       expect { grader.score(answers) }.to raise_error(ArgumentError)
-  #     end
-  #   end
+    #   it 'raises an ArgumentError' do
+    #     expect { grader.score(answers) }.to raise_error(ArgumentError)
+    #   end
+    # end
 
-  #   # the student didn't finish the test in time
-  #   context 'when passed fewer answers than necessary' do
-  #     let(:answers) { ['A', 'B'] }
+    # the student didn't finish the test in time
+    # context 'when passed fewer answers than necessary' do
+    #   let(:answers) { ['A', 'B'] }
 
-  #     it 'counts the last missing answers as incorrect' do
-  #       expect(grader.score(answers)).to eq(50.0)
-  #     end
-  #   end
+    #   it 'counts the last missing answers as incorrect' do
+    #     expect(grader.score(answers)).to eq(50.0)
+    #   end
+    # end
 
-  #   # the student forgot to answer a question
-  #   context 'when passed nil for an answer' do
-  #     let(:answers) { ['A', 'B', nil, 'D'] }
+    # the student forgot to answer a question
+    # context 'when passed nil for an answer' do
+    #   let(:answers) { ['A', 'B', nil, 'D'] }
 
-  #     it 'counts the nil as incorrect' do
-  #       expect(grader.score(answers)).to eq(75.0)
-  #     end
-  #   end
-  # end
+    #   it 'counts the nil as incorrect' do
+    #     expect(grader.score(answers)).to eq(75.0)
+    #   end
+    # end
+  end
 
   # # # the grading scale:
   # # # A: 100 - 90

@@ -26,10 +26,10 @@ RSpec.describe Grader do
       expect(grader.score(answers)).to eq(75.0)
     end
 
-    # it 'keeps track of grades it has scored' do
-    #   expect { grader.score(answers) }.to change { grader.grades.count }.by(1)
-    #   expect(grader.grades.last).to eq(75.0)
-    # end
+    it 'keeps track of grades it has scored' do
+      expect { grader.score(answers) }.to change { grader.grades.count }.by(1)
+      expect(grader.grades.last).to eq(75.0)
+    end
 
     # given that this is a multiple-choice grader, non-ABCD answers are invalid
     # context 'when passed impossible answers' do
